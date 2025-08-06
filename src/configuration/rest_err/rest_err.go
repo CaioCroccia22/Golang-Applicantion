@@ -8,20 +8,20 @@ import "net/http"
 type RestErr struct {
 	// Campo mensagem vai ter a mensagem do erro
 	//json -> Deixar o nosso objeto exportável para JSON
-	Message string `json: "message"`
+	Message string `json:"message"`
 	// Campo da stack trace do que aconteceu
-	Err string `json: "error"`
+	Err string `json:"error"`
 	// Campo code vai guardar qual o código da requisição que estamos dando para o cliente
-	Code int64 `json: "code"`
+	Code int64 `json:"code"`
 	// Campo Cause do tipo Causes vai guardar quais as causas de erro da aplicação
-	Causes []Causes `json: "causes"`
+	Causes []Causes `json:"causes"`
 }
 
 //Vai ser um array de um objeto
 type Causes struct {
 	// Dentro desse objeto vão ter os campos Field e Message
-	Field   string `json: "field"`
-	Message string `json: "message"`
+	Field   string `json:"field"`
+	Message string `json:"message"`
 }
 
 // Criando um constructor para o objeto
