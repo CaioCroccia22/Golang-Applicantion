@@ -1,4 +1,4 @@
-package rotes
+package routes
 
 // Instalação da biblioteca de router https://github.com/gin-gonic/gin
 // Gin é otimizado para alta performance, utilizando o roteador httprouter para lidar com as requisições HTTP de forma eficiente.

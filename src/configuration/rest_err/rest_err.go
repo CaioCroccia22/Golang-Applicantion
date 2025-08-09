@@ -1,6 +1,6 @@
 // Arquivo de padronização de erros -> Para todos os erros da aplicação estarem em um lugar
 // Evitar usar o nome err para não dar conflito com o pacote nativo do go
-package resterr_test
+package rest_err
 
 import "net/http"
 
@@ -12,7 +12,7 @@ type RestErr struct {
 	// Campo da stack trace do que aconteceu
 	Err string `json:"error"`
 	// Campo code vai guardar qual o código da requisição que estamos dando para o cliente
-	Code int64 `json:"code"`
+	Code int `json:"code"`
 	// Campo Cause do tipo Causes vai guardar quais as causas de erro da aplicação
 	Causes []Causes `json:"causes"`
 }
@@ -26,7 +26,7 @@ type Causes struct {
 
 // Criando um constructor para o objeto
 // *RestErr -> Significa retorno
-func NewRestErr(message, err string, code int64, causes []Causes) *RestErr {
+func NewRestErr(message, err string, code int, causes []Causes) *RestErr {
 	return &RestErr{
 		Message: message,
 		Err:     err,
@@ -35,7 +35,7 @@ func NewRestErr(message, err string, code int64, causes []Causes) *RestErr {
 	}
 }
 
-// Função implementada apatir de RestErro-> Para satisfazer a interface de error do go
+// Função implementada apatir de RestErr-> Para satisfazer a interface de error do go
 func (r *RestErr) Error() string {
 	return r.Message
 }
