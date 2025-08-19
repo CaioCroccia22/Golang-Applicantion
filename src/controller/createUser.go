@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"crud_application/src/configuration/rest_err"
+	"crud_application/src/configuration/validantion"
 	"crud_application/src/controller/model/request"
 	"crud_application/src/controller/model/response"
 	"fmt"
@@ -22,12 +22,12 @@ func CreateUser(c *gin.Context) {
 	 se ele for diferente de nulo vai ser criado o objeto RestErr
 	*/
 	if err := c.ShouldBindJSON(&userRequest); err != nil {
-		restErr := rest_err.NewBadRequestError(
-			// Sprintf -> Para concatenar as strings
-			fmt.Sprintf("There are incorrect fields, error=%s\n", err.Error()))
+		// Sprintf -> Para concatenar as strings
+		fmt.Sprintf("There are incorrect fields, error=%s\n", err.Error())
+		errRest := validantion.ValidateUserError(err)
 
-		//c.JSON -> Fala para retornar um JSON para a pessoal que fez a requisição
-		c.JSON(restErr.Code, restErr)
+		//c.JSON -> Fala para retornar um JSON para a pessoa que fez a requisição
+		c.JSON(errRest.Code, errRest)
 	}
 
 	c.JSON(200, userResponse)
