@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crud_application/src/configuration/logger"
 	"crud_application/src/controller/routes"
 	"log"
 
@@ -22,6 +23,7 @@ func main() {
 		gin.Default inicializa o roteador com logger e middlewares de recovery
 	*/
 	router := gin.Default()
+	logger.Logger.Info("Iniciando aplicação")
 
 	routes.InitRoute(&router.RouterGroup)
 	if err := router.Run(":8080"); err != nil {
