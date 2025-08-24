@@ -1,18 +1,22 @@
 package controller
 
 import (
+	"crud_application/src/configuration/logger"
 	"crud_application/src/configuration/validantion"
 	"crud_application/src/controller/model/request"
 	"crud_application/src/controller/model/response"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // c é o contexto da requisição é tudo que vem da requisição do objeto
 func CreateUser(c *gin.Context) {
+	logger.Info("Init CreateUser controller",
+		zap.String("journey", "createUser"),
+	)
 	var userRequest request.UserRequest
-	var userResponse response.UserResponse
+	// var userResponse response.UserResponse
 	/*
 	 ShouldBindJSON -> Esse método pega o body da requisição e joga dentro do objeto que colocar
 	 O & é para jogar dentro do ponteiro, do endereço de mémoria userRequest
@@ -23,13 +27,24 @@ func CreateUser(c *gin.Context) {
 	*/
 	if err := c.ShouldBindJSON(&userRequest); err != nil {
 		// Sprintf -> Para concatenar as strings
-		fmt.Sprintf("There are incorrect fields, error=%s\n", err.Error())
+		// fmt.Sprintf("There are incorrect fields, error=%s\n", err.Error())
+		logger.Error("Error trying to validate user info", err,
+			zap.String("journey", "createUser"),
+		)
 		errRest := validantion.ValidateUserError(err)
 
 		//c.JSON -> Fala para retornar um JSON para a pessoa que fez a requisição
 		c.JSON(errRest.Code, errRest)
+		return
 	}
 
-	c.JSON(200, userResponse)
-	fmt.Println(userRequest)
+	response := response.UserResponse{
+		ID:    "test",
+		Email: userRequest.Email,
+		Name:  userRequest.Name,
+		Age:   userRequest.Age,
+	}
+
+	c.JSON(200, response)
+	logger.Info("User create sucessfully", zap.String("journey", "createUser"))
 }
