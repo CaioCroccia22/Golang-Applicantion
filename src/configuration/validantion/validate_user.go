@@ -29,7 +29,7 @@ func init() {
 	if val, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		en := en.New()        //carrega o locale em inglês = instância da lingua
 		unt := ut.New(en, en) //cria a instância da tradução
-		transl, _ := unt.GetTranslator("en")
+		transl, _ = unt.GetTranslator("en")
 		en_translation.RegisterDefaultTranslations(val, transl) //registra as traduções
 	}
 }

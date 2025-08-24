@@ -4,10 +4,16 @@ import (
 	"crud_application/src/configuration/logger"
 	"crud_application/src/configuration/validantion"
 	"crud_application/src/controller/model/request"
-	"crud_application/src/controller/model/response"
+	"crud_application/src/model"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+)
+
+var (
+	// Comunicação do controller com o model
+	UserDomainInterface model.UserDomainInterface
 )
 
 // c é o contexto da requisição é tudo que vem da requisição do objeto
@@ -38,13 +44,23 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	response := response.UserResponse{
-		ID:    "test",
-		Email: userRequest.Email,
-		Name:  userRequest.Name,
-		Age:   userRequest.Age,
+	// Inicialização do nosso domain(constructor) do model
+	domain := model.NewUserDomain(userRequest.Email, userRequest.Name, userRequest.Password, userRequest.Age)
+	if err := domain.CreateUser(); err != nil {
+		c.JSON(err.Code, err)
+		return
 	}
 
-	c.JSON(200, response)
+	// response := response.UserResponse{
+	// 	ID:    "test",
+	// 	Email: userRequest.Email,
+	// 	Name:  userRequest.Name,
+	// 	Age:   userRequest.Age,
+	// }
+
+	// c.JSON(200, response)
+
+	c.String(http.StatusOK, "Tudo certo")
+
 	logger.Info("User create sucessfully", zap.String("journey", "createUser"))
 }
