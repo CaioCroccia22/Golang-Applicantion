@@ -5,6 +5,7 @@ import (
 	"crud_application/src/configuration/validantion"
 	"crud_application/src/controller/model/request"
 	"crud_application/src/model"
+	"crud_application/src/model/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -45,11 +46,24 @@ func CreateUser(c *gin.Context) {
 	}
 
 	// Inicialização do nosso domain(constructor) do model
-	domain := model.NewUserDomain(userRequest.Email, userRequest.Name, userRequest.Password, userRequest.Age)
-	if err := domain.CreateUser(); err != nil {
+	// controller cria o domain aparir do request
+	domain := model.NewUserDomain(
+		userRequest.Email,
+		userRequest.Name,
+		userRequest.Password,
+		userRequest.Age,
+	)
+
+	// controller chama o service
+	service := service.NewuserDomainService()
+	if err := service.CreateUser(domain); err != nil {
 		c.JSON(err.Code, err)
 		return
 	}
+
+	logger.Info("User created sucessfully",
+		zap.String("Journey", "createUser"))
+	return
 
 	// response := response.UserResponse{
 	// 	ID:    "test",
