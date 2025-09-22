@@ -5,7 +5,7 @@ import (
 	"crud_application/src/configuration/validantion"
 	"crud_application/src/controller/model/request"
 	"crud_application/src/model"
-	"crud_application/src/model/service"
+	"crud_application/src/view"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,7 +18,7 @@ var (
 )
 
 // c é o contexto da requisição é tudo que vem da requisição do objeto
-func CreateUser(c *gin.Context) {
+func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 	logger.Info("Init CreateUser controller",
 		zap.String("journey", "createUser"),
 	)
@@ -55,15 +55,16 @@ func CreateUser(c *gin.Context) {
 	)
 
 	// controller chama o service
-	service := service.NewuserDomainService()
-	if err := service.CreateUser(domain); err != nil {
+	// service := service.NewuserDomainService() ->
+	// antes do arquivo user_controller.go a chamada do service ocorria aqui
+	// assim era service.CreateUser(domain)
+	if err := uc.service.CreateUser(domain); err != nil {
 		c.JSON(err.Code, err)
 		return
 	}
 
 	logger.Info("User created sucessfully",
 		zap.String("Journey", "createUser"))
-	return
 
 	// response := response.UserResponse{
 	// 	ID:    "test",
@@ -73,8 +74,11 @@ func CreateUser(c *gin.Context) {
 	// }
 
 	// c.JSON(200, response)
+	// Response := view.ConvertDomainToResponse(domain)
 
-	c.String(http.StatusOK, "Tudo certo")
+	c.JSON(http.StatusOK, view.ConvertDomainToResponse(
+		domain,
+	))
 
 	logger.Info("User create sucessfully", zap.String("journey", "createUser"))
 }

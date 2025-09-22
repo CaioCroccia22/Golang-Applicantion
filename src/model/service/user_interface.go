@@ -20,7 +20,7 @@ type userDomainService struct {
 // Os métodos nesse primeiro momento pertencem a interface -> isso faz com uqe quando a gente chame a interface só chame as funções
 // e nã os valores
 type UserDomainService interface {
-	// Crialção dos métodos que o domain vai executar
+	// Criação dos métodos que o domain vai executar
 	CreateUser(model.UserDomainInterface) *rest_err.RestErr
 	DeleteUser(string) *rest_err.RestErr
 	UpdateUser(string, model.UserDomainInterface) *rest_err.RestErr
