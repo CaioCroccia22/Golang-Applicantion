@@ -21,7 +21,7 @@ func main() {
 	}
 
 	// Chamando o pacote de conexão com o banco
-	mongodb.InitConnection()
+	mongodb.NewMongoDBConnection()
 
 	// Inicialização de dependências
 	// Com a criação do arquivo user_controller.go será necessário criar a instância para uma estrutura unica do service
