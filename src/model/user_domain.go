@@ -9,35 +9,35 @@ import (
 // De modo que userDomain é privado os métodos da apsta service não enxergam eles
 // Para isso criamos essa interface que traz os métodos referentes a nossos objetos
 // O userDomain tem métodos e esses métodos são disponibilizados para a aplicação por essa interface
-type UserDomainInterface interface {
-	GetEmail() string
-	GetName() string
-	GetAge() int8
-	GetPassword() string
+// type UserDomainInterface interface {
+// 	GetEmail() string
+// 	GetName() string
+// 	GetAge() int8
+// 	GetPassword() string
 
-	SetID(string)
+// 	SetID(string)
 
-	GetJSONValue() (string, error)
+// 	GetJSONValue() (string, error)
 
-	EncryptPassword()
+// 	EncryptPassword()
 
-	// EncryptPassword() []byte
-}
+// 	// EncryptPassword() []byte
+// }
 
 /*
 Nosso construtor
 */
 
-func NewUserDomain(
-	email, password, name string, age int8,
-) UserDomainInterface {
-	return &userDomain{
-		Email:    email,
-		Password: password,
-		Name:     name,
-		Age:      age,
-	}
-}
+// func NewUserDomain(
+// 	email, password, name string, age int8,
+// ) UserDomainInterface {
+// 	return &userDomain{
+// 		Email:    email,
+// 		Password: password,
+// 		Name:     name,
+// 		Age:      age,
+// 	}
+// }
 
 func (ud *userDomain) SetID(id string) {
 	ud.ID = id

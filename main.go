@@ -1,11 +1,10 @@
 package main
 
 import (
+	"context"
 	"crud_application/src/configuration/database/mongodb"
 	"crud_application/src/configuration/logger"
-	"crud_application/src/controller"
 	"crud_application/src/controller/routes"
-	"crud_application/src/model/service"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -21,13 +20,20 @@ func main() {
 	}
 
 	// Chamando o pacote de conexão com o banco
-	mongodb.NewMongoDBConnection()
 
-	// Inicialização de dependências
+	database, err := mongodb.NewMongoDBConnection(context.Background())
+	if err != nil {
+		log.Fatalf("Error, trying to connect to database, erro=%s \n")
+		err.Error()
+		return
+	}
+
+	// Inicialização de dependências -> Passado para o arquivo init_dependencies
 	// Com a criação do arquivo user_controller.go será necessário criar a instância para uma estrutura unica do service
 	// essa estrutura sera chamada no controller
-	service := service.NewuserDomainService()
-	userController := controller.NewUserControllerInterface(service)
+	// service := service.NewuserDomainService()
+	// userController := controller.NewUserControllerInterface(service)
+	userController := initDependencies(database)
 
 	// Inicialização de rotas
 	router := gin.Default() //gin.Default inicializa o roteador com logger e middlewares de recovery

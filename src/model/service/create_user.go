@@ -4,17 +4,24 @@ import (
 	"crud_application/src/configuration/logger"
 	"crud_application/src/configuration/rest_err"
 	"crud_application/src/model"
-	"fmt"
 
 	"go.uber.org/zap"
 )
 
 func (ud *userDomainService) CreateUser(
 	userDomain model.UserDomainInterface,
-) *rest_err.RestErr {
+) (model.UserDomainInterface, *rest_err.RestErr) {
 	logger.Info("Init createUser model", zap.String("journey", "createUser"))
-	fmt.Println(ud)
+
+	// encripta a senha
 	userDomain.EncryptPassword()
-	fmt.Println(userDomain.GetPassword())
-	return nil
+
+	// Chama o repositori para criar o usuário
+	userDomainRepository, err := ud.UserRepository.CreateUser(userDomain)
+
+	if err != nil {
+		logger.Info("Init createUser model", zap.String("journey", "createUser"))
+		return userDomainRepository, nil
+	}
+
 }
