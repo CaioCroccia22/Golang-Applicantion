@@ -11,7 +11,9 @@ import (
 func (ud *userDomainService) CreateUser(
 	userDomain model.UserDomainInterface,
 ) (model.UserDomainInterface, *rest_err.RestErr) {
-	logger.Info("Init createUser model", zap.String("journey", "createUser"))
+
+	logger.Info("Init createUser model",
+		zap.String("journey", "createUser"))
 
 	// encripta a senha
 	userDomain.EncryptPassword()
@@ -20,8 +22,12 @@ func (ud *userDomainService) CreateUser(
 	userDomainRepository, err := ud.UserRepository.CreateUser(userDomain)
 
 	if err != nil {
-		logger.Info("Init createUser model", zap.String("journey", "createUser"))
+		logger.Info("Error trying to call repository", zap.String("journey", "createUser"))
 		return userDomainRepository, nil
 	}
-
+	logger.Info(
+		"Create service executed sucessfully",
+		zap.String("userId", userDomain.GetId()),
+		zap.String("journey", "createUser"))
+	return userDomainRepository, nil
 }

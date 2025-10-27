@@ -5,7 +5,10 @@ import (
 	"crud_application/src/configuration/logger"
 	"crud_application/src/configuration/rest_err"
 	"crud_application/src/model"
+	"crud_application/src/model/repository/entity/converter"
 	"os"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Criação do registro de usuário no banco
@@ -23,12 +26,9 @@ func (ur *userRepository) CreateUser(
 	// Collection do banco
 	collection := ur.databaseConnection.Collection(collection_name)
 
-	// Pegar os atributos do domain no formato JSON
-	value, err := userDomain.GetJSONValue()
+	// Conversão do domain para entity (BSON)
 
-	if err != nil {
-		return nil, rest_err.InternalServerError(err.Error())
-	}
+	value := converter.ConvertDomainToEntity(userDomain)
 
 	// Pela fato do userDomainInterface que a gente recebe ser uma interface, teriamos que cria um objeto getName e afins
 	// Então vamos pegar do userDomain
@@ -40,8 +40,8 @@ func (ur *userRepository) CreateUser(
 	}
 
 	//
-	userDomain.SetID(result.InsertedID.(string))
+	value.Id = result.InsertedID.(primitive.ObjectID)
 
-	return userDomain, nil
+	return converter.ConverterEntityToDomain(*value), nil
 
 }

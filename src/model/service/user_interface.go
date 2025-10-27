@@ -6,7 +6,10 @@ import (
 	"crud_application/src/model/repository"
 )
 
-// Função para inicializar nosso service
+// A intenção dessa interface é fazer com que o controller altere nela e não direto na userDomain
+// Os métodos nesse primeiro momento pertencem a interface -> isso faz com uqe quando a gente chame a interface só chame as funções
+// e nã os valores
+
 func NewUserDomainService(
 	UserRepository repository.UserRepository,
 ) UserDomainService {
@@ -22,9 +25,6 @@ type userDomainService struct {
 	UserRepository repository.UserRepository
 }
 
-// A intenção dessa interface é fazer com que o controller altere nela e não direto na userDomain
-// Os métodos nesse primeiro momento pertencem a interface -> isso faz com uqe quando a gente chame a interface só chame as funções
-// e nã os valores
 type UserDomainService interface {
 	// Criação dos métodos que o domain vai executar
 	CreateUser(model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr)

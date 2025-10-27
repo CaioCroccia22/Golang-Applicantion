@@ -58,13 +58,16 @@ func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 	// service := service.NewuserDomainService() ->
 	// antes do arquivo user_controller.go a chamada do service ocorria aqui
 	// assim era service.CreateUser(domain)
-	if err := uc.service.CreateUser(domain); err != nil {
+
+	domainResult, err := uc.service.CreateUser(domain)
+	if err != nil {
+		logger.Info(
+			"Error tryig to call CreateUser service",
+			zap.String("journey", "createUser"))
 		c.JSON(err.Code, err)
 		return
-	}
 
-	logger.Info("User created sucessfully",
-		zap.String("Journey", "createUser"))
+	}
 
 	// response := response.UserResponse{
 	// 	ID:    "test",
@@ -76,9 +79,13 @@ func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 	// c.JSON(200, response)
 	// Response := view.ConvertDomainToResponse(domain)
 
+	logger.Info(
+		"User create sucessfully",
+		zap.String("userId", domainResult.GetId()),
+		zap.String("journey", "createUser"))
+
 	c.JSON(http.StatusOK, view.ConvertDomainToResponse(
-		domain,
+		domainResult,
 	))
 
-	logger.Info("User create sucessfully", zap.String("journey", "createUser"))
 }
