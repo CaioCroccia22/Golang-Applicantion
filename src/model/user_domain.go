@@ -59,7 +59,7 @@ type userDomain struct {
 	age      int8   `JSON:"age"`
 }
 
-func (ud *userDomain) GetId() string {
+func (ud *userDomain) GetID() string {
 	return ud.id
 }
 

@@ -23,7 +23,7 @@ func (ud *userDomainService) CreateUser(
 
 	if err != nil {
 		logger.Info("Error trying to call repository", zap.String("journey", "createUser"))
-		return userDomainRepository, nil
+		return userDomainRepository, err
 	}
 	logger.Info(
 		"Create service executed sucessfully",

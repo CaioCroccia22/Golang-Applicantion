@@ -13,6 +13,8 @@ import (
 func initDependencies(
 	database *mongo.Database,
 ) controller.UserControllerInterface {
+	// Requisição: controller -> service -> domain -> entity
+
 	// camada de dados
 	repo := repository.NewUserRepository(database)
 	// Criação do service

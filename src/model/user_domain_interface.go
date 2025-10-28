@@ -6,7 +6,7 @@
 package model
 
 type UserDomainInterface interface {
-	GetId() string
+	GetID() string
 	GetEmail() string
 	GetName() string
 	GetAge() int8

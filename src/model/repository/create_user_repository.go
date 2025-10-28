@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.uber.org/zap"
 )
 
 // Criação do registro de usuário no banco
@@ -30,6 +31,8 @@ func (ur *userRepository) CreateUser(
 
 	value := converter.ConvertDomainToEntity(userDomain)
 
+	value.Id = primitive.NewObjectID()
+	logger.Info("O ID é: ", zap.String("id", value.Id.Hex()))
 	// Pela fato do userDomainInterface que a gente recebe ser uma interface, teriamos que cria um objeto getName e afins
 	// Então vamos pegar do userDomain
 	// Inserção dos valores transformados em JSON na collection
@@ -39,8 +42,9 @@ func (ur *userRepository) CreateUser(
 		return nil, rest_err.InternalServerError(err.Error())
 	}
 
-	//
 	value.Id = result.InsertedID.(primitive.ObjectID)
+
+	//
 
 	return converter.ConverterEntityToDomain(*value), nil
 
